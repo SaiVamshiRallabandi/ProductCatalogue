@@ -2,6 +2,7 @@ package com.ecom.productcatalog.controller;
 
 import com.ecom.productcatalog.dto.GetPrdctsBtCtgryRspDto;
 import com.ecom.productcatalog.dto.ResponseStatus;
+import com.ecom.productcatalog.dto.SortingCriteria;
 import com.ecom.productcatalog.model.Product;
 import com.ecom.productcatalog.model.RecordState;
 import com.ecom.productcatalog.service.IProductCatalogService;
@@ -40,8 +41,8 @@ public class ProductCategoryControllerTest {
         List<Product> productsList=List.of(product);
         Page<Product> products=new PageImpl<>(productsList);
 
-    when(service.fetchProductsByCategory("Electronics", RecordState.ACTIVE,0,10)).thenReturn(products);
-        ResponseEntity<GetPrdctsBtCtgryRspDto> response=controller.getProductsByCategory("Electronics",0,10);
+    when(service.fetchProductsByCategory("Electronics", RecordState.ACTIVE,0,10,SortingCriteria.PRICE_HIGH_LOW)).thenReturn(products);
+        ResponseEntity<GetPrdctsBtCtgryRspDto> response=controller.getProductsByCategory("Electronics",0,10,SortingCriteria.PRICE_HIGH_LOW);
         Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
         Assertions.assertEquals(response.getBody().getProductsList(),products);
         Assertions.assertEquals(response.getBody().getStatus(),ResponseStatus.SUCCESS);
@@ -50,8 +51,8 @@ public class ProductCategoryControllerTest {
     @Test
     void getProductsByCategoryTestWhenNoRecordsAvailable(){
         Page<Product> products=new PageImpl<>(List.of());
-        when(service.fetchProductsByCategory("Textiles",RecordState.ACTIVE,1,10)).thenReturn(products);
-        ResponseEntity<GetPrdctsBtCtgryRspDto> response=controller.getProductsByCategory("Textiles",1,10);
+        when(service.fetchProductsByCategory("Textiles",RecordState.ACTIVE,1,10, SortingCriteria.PRICE_HIGH_LOW)).thenReturn(products);
+        ResponseEntity<GetPrdctsBtCtgryRspDto> response=controller.getProductsByCategory("Textiles",1,10,SortingCriteria.PRICE_HIGH_LOW);
         Assertions.assertEquals(response.getStatusCode(),HttpStatus.OK);
         Assertions.assertEquals(response.getBody().getStatus(),ResponseStatus.FAILURE);
     }

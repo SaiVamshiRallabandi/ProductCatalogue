@@ -8,6 +8,7 @@ import com.ecom.productcatalog.model.RecordState;
 import com.ecom.productcatalog.service.IProductCatalogService;
 import com.ecom.productcatalog.service.ProductCatalogService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,9 @@ public class ProductCategoryController {
     }
 
     @GetMapping("/getProducts")
-    public ResponseEntity<GetPrdctsBtCtgryRspDto> getProductsByCategory(@RequestParam String category,@RequestParam int pageNo, @RequestParam int pageSize) {
-        Page<Product> products=service.fetchProductsByCategory(category, RecordState.ACTIVE,pageNo,pageSize);
+    public ResponseEntity<GetPrdctsBtCtgryRspDto> getProductsByCategory(@RequestParam String category,@RequestParam int pageNo, @RequestParam int pageSize,@RequestParam SortingCriteria sortCriteria) {
+
+        Page<Product> products=service.fetchProductsByCategory(category, RecordState.ACTIVE,pageNo,pageSize,sortCriteria);
         GetPrdctsBtCtgryRspDto rspDto=new GetPrdctsBtCtgryRspDto();
         if(products.getSize()>0){
             rspDto.setStatus(ResponseStatus.SUCCESS);
@@ -55,5 +57,6 @@ public class ProductCategoryController {
         }
         return ResponseEntity.ok().body(responseDto);
     }
+
 
 }

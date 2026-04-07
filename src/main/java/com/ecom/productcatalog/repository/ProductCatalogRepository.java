@@ -15,4 +15,5 @@ public interface ProductCatalogRepository extends JpaRepository<Product,Long> {
     <S extends Product> S save(S entity);
 
     Page<Product> getProductsByCategory_TitleAndState(String categoryTitle, RecordState state, Pageable pageable);
+
 }
