@@ -1,5 +1,6 @@
 package com.ecom.productcatalog.controller;
 
+import com.ecom.productcatalog.ExceptionHandler.NoProductsFoundException;
 import com.ecom.productcatalog.dto.*;
 import com.ecom.productcatalog.dto.ResponseStatus;
 import com.ecom.productcatalog.model.Category;
@@ -23,17 +24,15 @@ public class ProductCategoryController {
     }
 
     @GetMapping("/getProducts")
-    public ResponseEntity<GetPrdctsBtCtgryRspDto> getProductsByCategory(@RequestParam String category,@RequestParam int pageNo, @RequestParam int pageSize,@RequestParam SortingCriteria sortCriteria) {
+    public ResponseEntity<GetPrdctsBtCtgryRspDto> getProductsByCategory(@RequestParam String category,@RequestParam int pageNo, @RequestParam int pageSize,@RequestParam SortingCriteria sortCriteria) throws NoProductsFoundException {
 
         Page<Product> products=service.fetchProductsByCategory(category, RecordState.ACTIVE,pageNo,pageSize,sortCriteria);
         GetPrdctsBtCtgryRspDto rspDto=new GetPrdctsBtCtgryRspDto();
-        if(products.getSize()>0){
+        if(!products.isEmpty()){
             rspDto.setStatus(ResponseStatus.SUCCESS);
             rspDto.setProductsList(products);
         }else{
-            rspDto.setStatus(ResponseStatus.FAILURE);
-
-            rspDto.setExceptions(List.of(new ExceptionDto("001","No records found")));
+        throw new NoProductsFoundException("No products found");
         }
         return ResponseEntity.ok().body(rspDto);
     }

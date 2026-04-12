@@ -1,5 +1,6 @@
 package com.ecom.productcatalog.controller;
 
+import com.ecom.productcatalog.ExceptionHandler.NoProductsFoundException;
 import com.ecom.productcatalog.dto.GetPrdctsBtCtgryRspDto;
 import com.ecom.productcatalog.dto.ResponseStatus;
 import com.ecom.productcatalog.dto.SortingCriteria;
@@ -33,7 +34,7 @@ public class ProductCategoryControllerTest {
     IProductCatalogService service;
 
     @Test
-    public  void getProductsByCategoryTestWhenRecordsAvailable(){
+    public  void getProductsByCategoryTestWhenRecordsAvailable() throws NoProductsFoundException {
         Product product=new Product();
         product.setTitle("Mac Book");
         product.setPrice(99999.00);
@@ -49,7 +50,7 @@ public class ProductCategoryControllerTest {
     }
 
     @Test
-    void getProductsByCategoryTestWhenNoRecordsAvailable(){
+    void getProductsByCategoryTestWhenNoRecordsAvailable() throws NoProductsFoundException {
         Page<Product> products=new PageImpl<>(List.of());
         when(service.fetchProductsByCategory("Textiles",RecordState.ACTIVE,1,10, SortingCriteria.PRICE_HIGH_LOW)).thenReturn(products);
         ResponseEntity<GetPrdctsBtCtgryRspDto> response=controller.getProductsByCategory("Textiles",1,10,SortingCriteria.PRICE_HIGH_LOW);
