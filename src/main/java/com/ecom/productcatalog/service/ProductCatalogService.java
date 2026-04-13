@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.List;
 public class ProductCatalogService implements IProductCatalogService{
     ProductCatalogRepository repo;
     SortFactory sortFactory;
-    ProductCatalogService (ProductCatalogRepository repo,SortFactory sortFactory){
+    RedisTemplate<String,Object> redisTemplate;
+    ProductCatalogService (ProductCatalogRepository repo,SortFactory sortFactory,RedisTemplate<String,Object> redisTemplate){
         this.repo=repo;
         this.sortFactory=sortFactory;
+        this.redisTemplate=redisTemplate;
     }
     @Override
     public List<Product> fetchProductsByCategory(String category, RecordState state) {
@@ -40,5 +43,16 @@ public class ProductCatalogService implements IProductCatalogService{
         Pageable pageable= PageRequest.of( pageNumber, pageSize,sort);
 
         return repo.getProductsByCategory_TitleAndState(category,state,pageable);
+    }
+
+    @Override
+    public Product fetchProductById(Long prodId) {
+        Product product=null;
+        product=(Product)redisTemplate.opsForHash().get("PRODUCT","PRODUCT_"+prodId);
+        if(product!=null)return product;
+
+        product=repo.findById(prodId).get();
+        redisTemplate.opsForHash().put("PRODUCT","PRODUCT_"+prodId,product);
+        return product;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductCatalogRepository extends JpaRepository<Product,Long> {
 
@@ -16,4 +17,6 @@ public interface ProductCatalogRepository extends JpaRepository<Product,Long> {
 
     Page<Product> getProductsByCategory_TitleAndState(String categoryTitle, RecordState state, Pageable pageable);
 
+    @Override
+    Optional<Product> findById(Long aLong);
 }

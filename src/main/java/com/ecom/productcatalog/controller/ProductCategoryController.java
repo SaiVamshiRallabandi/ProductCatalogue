@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/productCatalog")
@@ -56,6 +57,16 @@ public class ProductCategoryController {
         }
         return ResponseEntity.ok().body(responseDto);
     }
+
+    @GetMapping("/getProduct")
+    public ResponseEntity<AddProductResponseDto> getProductById(@RequestParam Long prodId){
+        AddProductResponseDto responseDto=new AddProductResponseDto();
+        Product prod=service.fetchProductById(prodId);
+        responseDto.setStatus(ResponseStatus.SUCCESS);
+        responseDto.setProduct(prod);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
 
 
 }

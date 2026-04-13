@@ -15,4 +15,6 @@ public interface IProductCatalogService {
     public Product saveProduct(Product product);
 
     public Page<Product> fetchProductsByCategory(String category, RecordState state, int pageNumber, int pageSize, SortingCriteria sortCriteria);
+
+    public Product fetchProductById(Long prodId);
 }
