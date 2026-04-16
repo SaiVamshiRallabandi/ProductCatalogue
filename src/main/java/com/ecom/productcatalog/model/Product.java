@@ -19,4 +19,6 @@ public class Product extends BaseModel implements Serializable{
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Category category;
 
+    private Boolean isVerified;
+
 }

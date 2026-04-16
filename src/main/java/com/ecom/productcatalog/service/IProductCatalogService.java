@@ -1,5 +1,6 @@
 package com.ecom.productcatalog.service;
 
+import com.ecom.productcatalog.ExceptionHandler.NoProductsFoundException;
 import com.ecom.productcatalog.dto.SortingCriteria;
 import com.ecom.productcatalog.model.Product;
 import com.ecom.productcatalog.model.RecordState;
@@ -16,5 +17,5 @@ public interface IProductCatalogService {
 
     public Page<Product> fetchProductsByCategory(String category, RecordState state, int pageNumber, int pageSize, SortingCriteria sortCriteria);
 
-    public Product fetchProductById(Long prodId);
+    public Product fetchProductById(Long prodId) throws NoProductsFoundException;
 }

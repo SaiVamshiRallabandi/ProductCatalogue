@@ -45,6 +45,7 @@ public class ProductCategoryController {
         product.setDescription(reqDto.getProductDescription());
         product.setPrice(reqDto.getPrice());
         product.setState(RecordState.ACTIVE);
+        product.setIsVerified(false);
         product.setCategory(new Category(reqDto.getProductCategory(),null));
         Product resp=service.saveProduct(product);
         AddProductResponseDto responseDto=new AddProductResponseDto();
@@ -59,7 +60,7 @@ public class ProductCategoryController {
     }
 
     @GetMapping("/getProduct")
-    public ResponseEntity<AddProductResponseDto> getProductById(@RequestParam Long prodId){
+    public ResponseEntity<AddProductResponseDto> getProductById(@RequestParam Long prodId) throws NoProductsFoundException {
         AddProductResponseDto responseDto=new AddProductResponseDto();
         Product prod=service.fetchProductById(prodId);
         responseDto.setStatus(ResponseStatus.SUCCESS);
